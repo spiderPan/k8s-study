@@ -1,7 +1,11 @@
 secretGenerator:
   - name: mysql-pass
     literals:
-      - password=test
+      - root_pass=test_root
+      - db_user=admin
+      - db_pass=test
+      - db_name=k8s_wp
 resources:
+  - wp-configmap.yaml
   - mysql-deployment.yaml
   - wp-deployment.yaml

@@ -59,16 +59,25 @@ spec:
               name: wp
           env:
             - name: WORDPRESS_DB_HOST
-              value: wp-mysql
+              valueFrom:
+                configMapKeyRef:
+                  name: wp-configmap
+                  key: db_url
             - name: WORDPRESS_DB_NAME
-              value: k8s-db
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-pass
+                  key: db_name
             - name: WORDPRESS_DB_USER
-              value: root
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-pass
+                  key: db_user
             - name: WORDPRESS_DB_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: mysql-pass
-                  key: password
+                  key: db_pass
           volumeMounts:
             - name: wp-persistent-storage
               mountPath: /var/www/html

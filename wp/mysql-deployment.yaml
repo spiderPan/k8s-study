@@ -1,12 +1,12 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: wp-mysql-service
+  name: wp-mysql
   labels:
     app: wp
 spec:
   selector:
-    app: ap
+    app: wp
     tier: mysql
   ports:
     - port: 3306
@@ -58,13 +58,26 @@ spec:
             - name: mysql-persistent-storage
               mountPath: /var/lib/mysql
           env:
-            - name: MYSQL_DATABASE
-              value: k8s-db
             - name: MYSQL_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: mysql-pass
-                  key: password
+                  key: root_pass
+            - name: MYSQL_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-pass
+                  key: db_name
+            - name: MYSQL_USER
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-pass
+                  key: db_user
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-pass
+                  key: db_pass
       volumes:
         - name: mysql-persistent-storage
           persistentVolumeClaim:
